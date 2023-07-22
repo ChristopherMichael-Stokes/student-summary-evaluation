@@ -9,7 +9,9 @@ peft~=0.4.0
 scipy~=1.11.1
 torch~=2.0.1
 transformers~=4.31.0
+sentence-transformers~=2.2.2
 xformers~=0.0.20
+plotly~=5.15
 
 # Development dependencies
 mypy~=1.4.1
