@@ -1,0 +1,13 @@
+.env
+.mypy_cache
+.ipynb_checkpoints
+__pycache__
+
+# Data
+data/**/*
+!data/.gitkeep
+outputs
+
+# Models
+models/**/*
+!models/.gitkeep
