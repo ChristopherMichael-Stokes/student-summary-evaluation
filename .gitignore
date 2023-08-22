@@ -2,11 +2,13 @@
 .mypy_cache
 .ipynb_checkpoints
 __pycache__
+.DS_Store
 
 # Data
 data/**/*
 !data/.gitkeep
-notebooks/nltk_data
+notebooks/**/*
+!notebooks/*.ipynb
 outputs
 
 # Models
