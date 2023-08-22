@@ -1,6 +1,18 @@
 defaults:
   - _self_
+  - train: baseline
 
+run:
+  load_split: train
+  make_pos_features: True
+
+data:
+  dir: data/commonlit-evaluate-student-summaries
+  sample_submission: sample_submission.csv
+  summaries_train: summaries_train.csv
+  summaries_test: summaries_test.csv
+  prompts_train: prompts_train.csv
+  prompts_test: prompts_test.csv
 
 hydra:
   job:

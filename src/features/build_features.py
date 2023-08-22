@@ -1,12 +1,9 @@
+import logging
 import os
-import random
 from collections import defaultdict
-from functools import partial, reduce
-from math import sqrt
-from operator import or_
+from functools import partial
 from pathlib import Path
-from pprint import pprint
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Set, Union
 
 import datasets
 import nltk
@@ -24,6 +21,9 @@ nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('universal_tagset')
 nltk.download('words')
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 def text_tokenize(text: str, stop_words: Set[str], lemmatiser: WordNetLemmatizer) -> List[str]:
@@ -149,15 +149,18 @@ def make_split(summaries_path: Path, prompts_path: Path, make_pos_features: bool
     lemmatiser = WordNetLemmatizer()
 
     # Load base csv
+    log.info('Loading data files')
     summaries_df = pd.read_csv(summaries_path)
     prompts_df = pd.read_csv(prompts_path)
 
     # Preprocess prompts in pandas as data is very small
+    log.info('Preprocess prompt data')
     for column in ['prompt_title', 'prompt_question', 'prompt_text']:
         nlp_preprocess(prompts_df, stop_words, lemmatiser, column)
         prompts_df[f'{column}_unique_bigrams'] = prompts_df[f'{column}_bigram'].str.len()
 
     # Use huggingface arrow dataset to process summaries in parallel batches
+    log.info('Preprocess summaries data')
     summaries_dataset = datasets.Dataset.from_pandas(summaries_df, preserve_index=False)
     proc_func = partial(process_col, stop_words=stop_words, lemmatiser=lemmatiser, col='text')
     summaries_df = summaries_dataset.map(function=lambda example: {
@@ -166,13 +169,17 @@ def make_split(summaries_path: Path, prompts_path: Path, make_pos_features: bool
     summaries_df['text_unique_bigrams'] = summaries_df['text_bigram'].str.len()
 
     # Using left join in the rare occurence we have a summary with incorrect prompt id
+    log.info('Join prompts to summaries')
     df = pd.merge(summaries_df, prompts_df, how='left', on='prompt_id')
     df.fillna('')
 
     # Create new features
+    log.info('Adding bigram features')
     add_bigram_features(df)
+    log.info('Adding word based features')
     add_word_features(df)
     if make_pos_features:
+        log.info('Adding POS based features')
         add_pos_features(df)
 
     return df
