@@ -5,7 +5,7 @@ model_params:
   learning_rate: 0.08
   boosting_type: dart
   num_leaves: 11
-  seed: 42
+  seed: 9
 
 f_cols:
   - text_bigram_overlap
@@ -16,3 +16,8 @@ f_cols:
   - word_len_avg
   - word_len_q10
   - word_len_q90
+  - verb_count
+  - noun_count
+  - adv_count
+  - adj_count
+  - det_count
