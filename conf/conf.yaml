@@ -2,6 +2,9 @@ defaults:
   - _self_
   - train: baseline
 
+mlflow:
+  uri: data/mlruns
+
 run:
   load_split: train
   make_pos_features: True

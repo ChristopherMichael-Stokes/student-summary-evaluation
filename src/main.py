@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import hydra
+import mlflow
 
 from eval import eval_validation
 from features import build_features
@@ -29,7 +30,17 @@ def main(cfg):
     else:
         raise AssertionError('Invalid dataset split')
 
-    eval_validation(df_train=df, f_cols=cfg.train.f_cols, model_params=dict(cfg.train.model_params))
+    mlflow.set_tracking_uri(project_root / cfg.mlflow.uri)
+    with mlflow.start_run():
+        for param, value in cfg.train.model_params.items():
+            mlflow.log_param(param, value)
+
+        train_mcrmse, validation_mcrmse, diff = eval_validation(
+            df_train=df, f_cols=cfg.train.f_cols, model_params=dict(cfg.train.model_params))
+
+        mlflow.log_metric('Train MCRMSE', train_mcrmse)
+        mlflow.log_metric('Validation MCRMSE', validation_mcrmse)
+        mlflow.log_metric('Train / Val diff', diff)
 
 
 if __name__ == '__main__':
