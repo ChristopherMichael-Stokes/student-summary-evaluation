@@ -182,6 +182,8 @@ def make_split(summaries_path: Path, prompts_path: Path, make_pos_features: bool
         log.info('Adding POS based features')
         add_pos_features(df)
 
+    # TODO: implement missing wordcount features
+
     return df
 
 
@@ -200,4 +202,4 @@ if __name__ == '__main__':
     else:
         df = make_split(summaries_path=summaries_train, prompts_path=prompts_train, make_pos_features=True)
 
-    pass
+    pass  # Used for breakpoint
