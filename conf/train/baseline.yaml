@@ -5,11 +5,14 @@ model_params:
   learning_rate: 0.08
   boosting_type: dart
   num_leaves: 11
-  seed: 9
+  seed: 8
 
 f_cols:
   - text_bigram_overlap
   - text_unique_bigrams
+  - text_bigram_exclusive
+  - text_bigram_ratio
+  - text_bigram_diff
   - unique_ratio
   - n_words
   - unique_words
