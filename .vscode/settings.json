@@ -6,5 +6,9 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
     },
-    "python.formatting.autopep8Args": [ "--max-line-length", "120" ]
+    "python.formatting.autopep8Args": [
+        "--max-line-length",
+        "120"
+    ],
+    "python.languageServer": "Pylance",
 }
